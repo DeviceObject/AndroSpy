@@ -131,7 +131,12 @@ namespace SV
                                     case ".mp3":
                                     case ".wav":
                                     case ".ogg":
-                                    case ".3gpp":
+                                    case ".3gp":
+                                    case ".m4a":
+                                    case ".acc":
+                                    case ".amr":
+                                    case ".flac":
+                                    case ".ota":
                                         lv.Tag = "music";
                                         break;                                  
                                     default:
