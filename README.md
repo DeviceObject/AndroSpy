@@ -3,7 +3,7 @@
 
 An Android RAT that written in completely C# by me (qH0sT a.k.a Sagopa K)  
 
-<img src="https://user-images.githubusercontent.com/45147475/110235340-91760f00-7f40-11eb-8749-337234ebe020.PNG" width="45%"></img>  
+<img src="https://user-images.githubusercontent.com/45147475/110235340-91760f00-7f40-11eb-8749-337234ebe020.PNG" width="55%"></img>  
 
 Yes, It is supporting dns connection like no-ip or duckdns or dynu etc. and it has been tested with ngrok and portmap.io; it is working with both but you can't hear live mic because of UDP port.  
 
