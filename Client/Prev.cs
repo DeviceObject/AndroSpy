@@ -61,6 +61,7 @@ namespace Task2
                         if (camSock != null)
                         {
                             camSock.Send(live, 0, live.Length, SocketFlags.None);
+                            System.Threading.Tasks.Task.Delay(1).Wait();
                         }
                     }
                     catch (Exception)

