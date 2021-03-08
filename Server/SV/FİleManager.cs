@@ -41,18 +41,18 @@ namespace SV
         {
             try
             {
+                lArray.Clear(); lArray_.Clear();
                 switch (s1)
                 {
-                    case "IKISIDE":
-                        lArray.Clear(); lArray_.Clear();
+                    case "IKISIDE":                        
                         listView1.Items.Clear();
                         listView2.Items.Clear();
                         break;
                     case "CIHAZ":
-                        listView1.Items.Clear(); lArray.Clear();
+                        listView1.Items.Clear(); //lArray.Clear();
                         break;
                     case "SDCARD":
-                        listView2.Items.Clear(); lArray_.Clear();
+                        listView2.Items.Clear(); //lArray_.Clear();
                         break;
                 }
 
@@ -138,7 +138,7 @@ namespace SV
                                     case ".ogg":
                                     case ".3gp":
                                     case ".m4a":
-                                    case ".acc":
+                                    case ".aac":
                                     case ".amr":
                                     case ".flac":
                                     case ".ota":
@@ -172,13 +172,20 @@ namespace SV
                         {
                         }
                     }
-                    listView2.Items.AddRange(lArray_.ToArray());
+                    if (lArray.ToArray().Count() > 0)
+                    {                      
+                        listView1.Items.AddRange(lArray.ToArray());
+                    }
+                    if (lArray_.Count() > 0)
+                    {                
+                        listView2.Items.AddRange(lArray_.ToArray());
+                    }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-            }
-            listView1.Items.AddRange(lArray.ToArray());
+                MessageBox.Show(ex.ToString());
+            }            
             label7.Text = "Count SD Card: " + (listView2.Items.Count - 1).ToString();
             label6.Text = "Count Device:   " + (listView1.Items.Count - 1).ToString();
         }
