@@ -547,13 +547,17 @@ namespace Task2
             try
             {
                 AlarmManager am = (AlarmManager)context.GetSystemService(AlarmService);
-                Intent i = new Intent(context, typeof(Alarm));
+                Intent i = new Intent(context, Java.Lang.Class.FromType(typeof(Alarm)));
                 i.SetAction("MY_ALARM_RECEIVED");
-                PendingIntent pi = PendingIntent.GetBroadcast(context, 0, i, 0);
+                PendingIntent pi = PendingIntent.GetBroadcast(context, 0, i, PendingIntentFlags.UpdateCurrent);
                 if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
-                    am.SetExactAndAllowWhileIdle(AlarmType.RtcWakeup, Java.Lang.JavaSystem.CurrentTimeMillis() + 5000, pi);
+                {
+                    am.SetAndAllowWhileIdle(AlarmType.RtcWakeup, Java.Lang.JavaSystem.CurrentTimeMillis() + 5000, pi);
+                }
                 else
+                {
                     am.Set(AlarmType.RtcWakeup, Java.Lang.JavaSystem.CurrentTimeMillis() + 5000, pi);
+                }
             }
             catch (Exception) 
             {
@@ -567,10 +571,11 @@ namespace Task2
         {
             try
             {
-                Intent intent = new Intent(context, typeof(Alarm));
-                PendingIntent sender = PendingIntent.GetBroadcast(context, 0, intent, 0);
+                Intent intent = new Intent(context, Java.Lang.Class.FromType(typeof(Alarm)));
+                PendingIntent sender = PendingIntent.GetBroadcast(context, 0, intent, PendingIntentFlags.CancelCurrent);
                 AlarmManager alarmManager = (AlarmManager)context.GetSystemService(AlarmService);
                 alarmManager.Cancel(sender); alarmManager.Dispose();
+                System.Diagnostics.Debug.WriteLine("Canceled alarm");
             }
             catch (Exception) { }
 
