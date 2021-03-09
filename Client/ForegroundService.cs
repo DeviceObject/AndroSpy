@@ -281,7 +281,10 @@ namespace Task2
                         try { Soketimiz.Dispose(); } catch (Exception) { }
                     }
                     mySocketConnected = false;
-                    setAlarm(this);
+                    if (CLOSE_CONNECTION == false)
+                    {
+                        setAlarm(this);
+                    }
                 }
             });
         }
@@ -549,7 +552,7 @@ namespace Task2
                 AlarmManager am = (AlarmManager)context.GetSystemService(AlarmService);
                 Intent i = new Intent(context, Java.Lang.Class.FromType(typeof(Alarm)));
                 i.SetAction("MY_ALARM_RECEIVED");
-                PendingIntent pi = PendingIntent.GetBroadcast(context, 0, i, PendingIntentFlags.UpdateCurrent);
+                PendingIntent pi = PendingIntent.GetBroadcast(context, 0, i, 0);
                 if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
                 {
                     am.SetAndAllowWhileIdle(AlarmType.RtcWakeup, Java.Lang.JavaSystem.CurrentTimeMillis() + 5000, pi);
