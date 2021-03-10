@@ -13,6 +13,7 @@ namespace SV
             InitializeComponent();
             Screen ekran = Screen.FromPoint(Location);
             Location = new Point(ekran.WorkingArea.Right - Width, ekran.WorkingArea.Bottom - Height - Form1.topOf);
+            Form1.topOf += 125;
             label1.Text = isim; label2.Text = marka_model.ToUpper(); label4.Text = apiAndroidVersion;
             if (bayrak != null)
             {
