@@ -1,9 +1,7 @@
-﻿using Android.App;
-using Android.Content;
+﻿using Android.Content;
 
 namespace Task2
 {
-    [IntentFilter(new[] { "MY_ALARM_RECEIVED" })]
     [BroadcastReceiver]
     class Alarm : BroadcastReceiver
     {
